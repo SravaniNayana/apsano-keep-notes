@@ -32,7 +32,7 @@ mongoose.connect(mongoURI)
   });
 
 // Register route
-app.post('/api/auth/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   try {
     const { username, password } = req.body;
 
