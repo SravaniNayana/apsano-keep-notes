@@ -44,7 +44,12 @@ exports.handler = async (event) => {
       } else {
         resolve({
           statusCode: res.statusCode,
-          headers: res.headers,
+          headers: {
+            ...res.headers,
+            'Access-Control-Allow-Origin': 'https://sravanikeepnotes.netlify.app', // Ensure CORS headers are set
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Include required headers
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', // Include required methods
+          },
           body: res.body,
         });
       }
