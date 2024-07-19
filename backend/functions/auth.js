@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
     const req = {
       method: event.httpMethod,
       headers: event.headers,
-      body: JSON.parse(event.body)
+      body: JSON.parse(event.body || '{}')
     };
 
     const res = {
