@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://sravanikeepnotes.netlify.app', // Replace with your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 app.use(express.json());
 const authRoutes = require('../routes/notes');
 app.use('/api/notes', authRoutes);
