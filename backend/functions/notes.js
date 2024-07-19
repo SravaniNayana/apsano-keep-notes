@@ -6,8 +6,9 @@ const app = express();
 
 app.use(cors({
   origin: 'https://sravanikeepnotes.netlify.app', // Replace with your frontend's URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true, // Allow credentials if needed
 }));
 app.use(express.json());
 const authRoutes = require('../routes/notes');
