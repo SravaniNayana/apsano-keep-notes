@@ -14,10 +14,7 @@ const authRoutes = require('../routes/notes');
 app.use('/api/notes', authRoutes);
 // Connect to MongoDB
 const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(mongoURI);
 
 exports.handler = async (event) => {
   return new Promise((resolve, reject) => {
