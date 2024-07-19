@@ -17,6 +17,6 @@ exports.handler = async (event, context) => {
   // Handle the route logic here
   return {
     statusCode: 200,
-    body: JSON.stringify({ message: 'Hello from the backend!' })
+    body: JSON.stringify({ message: 'Hello world from the backend!' })
   };
 };
