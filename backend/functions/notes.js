@@ -12,10 +12,19 @@ app.use(cors({
 app.use(express.json());
 const authRoutes = require('../routes/notes');
 app.use('/api/notes', authRoutes);
+
 // Connect to MongoDB
 const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI);
+if (!mongoURI) {
+  throw new Error('MONGO_URI environment variable is not set');
+}
 
+mongoose.connect(mongoURI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1); // Exit with failure code
+  });
 exports.handler = async (event) => {
   return new Promise((resolve, reject) => {
     const req = {
