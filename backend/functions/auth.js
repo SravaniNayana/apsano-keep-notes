@@ -2,7 +2,6 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const serverless = require('serverless-http');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust path as needed
@@ -84,4 +83,38 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // Serverless function handler
-exports.handler = serverless(app);
+exports.handler = async (event) => {
+  return new Promise((resolve, reject) => {
+    const req = {
+      method: event.httpMethod,
+      headers: event.headers,
+      body: JSON.parse(event.body || '{}'),
+      query: event.queryStringParameters || {},
+    };
+    const res = {
+      statusCode: 200,
+      headers: {},
+      body: '',
+      setHeader: (key, value) => res.headers[key] = value,
+      send: (body) => res.body = body,
+      json: (body) => res.body = JSON.stringify(body),
+      status: (code) => { res.statusCode = code; return res; }
+    };
+    app(req, res, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({
+          statusCode: res.statusCode,
+          headers: {
+            ...res.headers,
+            'Access-Control-Allow-Origin': 'https://sravanikeepnotes.netlify.app', // Ensure CORS headers are set
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Include required headers
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', // Include required methods
+          },
+          body: res.body,
+        });
+      }
+    });
+  });
+};
