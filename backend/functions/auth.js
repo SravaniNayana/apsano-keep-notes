@@ -111,7 +111,10 @@ exports.handler = async (event) => {
       } else {
         resolve({
           statusCode: res.statusCode,
-          headers: res.headers,
+          headers: {
+            ...res.headers,
+            'Access-Control-Allow-Origin': 'https://sravanikeepnotes.netlify.app', // Ensure CORS headers are set
+          },
           body: res.body,
         });
       }
