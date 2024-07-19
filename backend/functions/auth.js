@@ -10,7 +10,7 @@ const User = require('../models/User'); // Adjust path as needed
 const app = express();
 app.use(cors({
   origin: 'https://sravanikeepnotes.netlify.app', // Replace with your frontend's URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
 app.use(express.json());
