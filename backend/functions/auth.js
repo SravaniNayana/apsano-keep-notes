@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // Adjust path as needed
+const User = require('../models/User'); // Adjust path as needed
 
 const app = express();
 app.use(cors());
