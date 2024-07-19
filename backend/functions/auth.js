@@ -8,6 +8,11 @@ app.use(express.json());
 // Import your route handlers
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+const mongoURI = process.env.MONGO_URI;
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 exports.handler = async (event, context) => {
   return new Promise((resolve, reject) => {
