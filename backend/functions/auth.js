@@ -7,7 +7,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust path as needed
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://sravanikeepnotes.netlify.app', // Replace with your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 app.use(express.json());
 
 // JWT secret key
