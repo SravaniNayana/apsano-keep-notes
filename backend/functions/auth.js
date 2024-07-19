@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
     const req = {
       method: event.httpMethod,
       headers: event.headers,
-      body: JSON.parse(event.body),
+      body: JSON.parse(event.body)
     };
 
     const res = {
@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
       headers: {},
       body: '',
       setHeader: (key, value) => res.headers[key] = value,
-      send: (body) => res.body = body,
+      send: (body) => res.body = body
     };
 
     app(req, res, (err) => {
@@ -38,7 +38,7 @@ exports.handler = async (event, context) => {
         resolve({
           statusCode: res.statusCode,
           headers: res.headers,
-          body: res.body,
+          body: res.body
         });
       }
     });
