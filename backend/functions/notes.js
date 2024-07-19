@@ -7,49 +7,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+const authRoutes = require('../routes/notes');
+app.use('/api/notes', authRoutes);
 // Connect to MongoDB
 const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
-
-app.get('/api/notes', async (req, res) => {
-  try {
-    const notes = await Note.find();
-    res.status(200).json(notes);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch notes', error });
-  }
-});
-
-app.post('/api/notes', async (req, res) => {
-  try {
-    const newNote = new Note(req.body);
-    const savedNote = await newNote.save();
-    res.status(201).json(savedNote);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create note', error });
-  }
-});
-
-app.put('/api/notes/:id', async (req, res) => {
-  try {
-    const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json(updatedNote);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to update note', error });
-  }
-});
-
-app.delete('/api/notes/:id', async (req, res) => {
-  try {
-    await Note.findByIdAndDelete(req.params.id);
-    res.status(204).end();
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to delete note', error });
-  }
 });
 
 exports.handler = async (event) => {
