@@ -150,17 +150,29 @@ const handlePost = async (event) => {
 };
 
 const handlePut = async (event) => {
+  const path = event.path;
   const noteId = event.path.split('/').pop(); // Get ID from the path
-  const { title, content, tags, color, reminder, archived, trash } = JSON.parse(event.body);
-  const note = await Note.findByIdAndUpdate(noteId, {
-      title,
-      content,
-      tags,
-      color,
-      reminder,
-      archived,
-      trash
-  }, { new: true });
+  const { title, content, tags, color, reminder } = JSON.parse(event.body);
+  if (path.includes('/archive')) {
+    const note = await Note.findByIdAndUpdate(noteId, {
+        title,
+        content,
+        tags,
+        color,
+        reminder,
+        archived: true
+    }, { new: true });
+  } else if (path.includes('/unarchive')) {
+     const note = await Note.findByIdAndUpdate(noteId, {
+          title,
+          content,
+          tags,
+          color,
+          reminder,
+          archived: false
+      }, { new: true });
+  }
+  
 
   if (!note) {
     return {
@@ -171,6 +183,7 @@ const handlePut = async (event) => {
       },
     };
   }
+  
   return {
     statusCode: 200,
     body: JSON.stringify(note),
