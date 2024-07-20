@@ -7,12 +7,13 @@ const cors = require('cors');
 const mongoURI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoURI);
 
 const corsOptions = {
   origin: 'https://sravanikeepnotes.netlify.app', // allow requests from your frontend domain
   methods: ['POST', 'OPTIONS'], // allow specific methods
   allowedHeaders: ['Content-Type', 'Authorization'], // allow specific headers
+  credentials: true, // Allow credentials if needed
 };
 
 exports.handler = async (event, context) => {
