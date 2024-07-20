@@ -1,7 +1,7 @@
 // functions/auth/register.js
 
 const mongoose = require('mongoose');
-const User = require('../../models/User'); // Adjust the path as needed
+const User = require('../models/User'); // Adjust the path as needed
 const jwt = require('jsonwebtoken');
 
 // Connect to MongoDB
