@@ -95,9 +95,25 @@ const handleGet = async (event) => {
         'Access-Control-Allow-Origin': corsOptions.origin,
       },
     };
+  } else if (path.includes('/trash')) {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const notes = await Note.find({ user: userId, trash: true, updatedAt: { $gte: thirtyDaysAgo } });
+      const deletedNotes = await Note.deleteMany({
+        user: userId,
+        trash: true,
+        updatedAt: { $lt: thirtyDaysAgo }
+      });
+      return {
+        statusCode: 200,
+        body: JSON.stringify(notes),
+        headers: {
+          'Access-Control-Allow-Origin': corsOptions.origin,
+        },
+      };
   }
 
-  const notes = await Note.find({  user: userId, archived: false });
+  const notes = await Note.find({  user: userId, archived: false, trash: false });
   return {
     statusCode: 200,
     body: JSON.stringify(notes),
@@ -119,6 +135,7 @@ const handlePost = async (event) => {
     color,
     reminder,
     archived: false,
+    trash: false,
   });
 
   await note.save();
@@ -134,7 +151,6 @@ const handlePost = async (event) => {
 
 const handlePut = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
-  const { archived } = JSON.parse(event.body);
   const { title, content, tags, color, reminder, archived, trash } = JSON.parse(event.body);
   const note = await Note.findByIdAndUpdate(noteId, {
       title,
@@ -167,8 +183,11 @@ const handlePut = async (event) => {
 const handleDelete = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
 
-  await Note.findByIdAndDelete(noteId);
-
+  // await Note.findByIdAndDelete(noteId);
+  const note = await Note.findByIdAndUpdate( noteId, user: user.userId },
+    { trash: true },
+    { new: true }
+  );
   return {
     statusCode: 204, // No Content
     headers: {
