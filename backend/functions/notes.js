@@ -152,10 +152,11 @@ const handlePost = async (event) => {
 const handlePut = async (event) => {
   const path = event.path;
   const noteId = event.path.split('/').pop(); // Get ID from the path
+  const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
   if (path.includes('/archive')) {
-    const note = await Note.findByIdAndUpdate(noteId, { archived: true }, { new: true });
+    const note = await Note.findByIdAndUpdate({ _id: noteId, user: userId }, { archived: true }, { new: true });
   } else if (path.includes('/unarchive')) {
-     const note = await Note.findByIdAndUpdate(noteId, { archived: false }, { new: true });
+     const note = await Note.findByIdAndUpdate({ _id: noteId, user: userId }, { archived: false }, { new: true });
   }
   
 
@@ -180,9 +181,10 @@ const handlePut = async (event) => {
 
 const handleDelete = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
+  const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
 
   // await Note.findByIdAndDelete(noteId);
-  const note = await Note.findByIdAndUpdate( noteId,
+  const note = await Note.findByIdAndUpdate( { _id: noteId, user: userId },
     { trash: true },
     { new: true }
   );
