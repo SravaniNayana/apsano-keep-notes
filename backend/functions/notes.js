@@ -176,6 +176,7 @@ const handlePut = async (event) => {
 };
 
 const handleDelete = async (event) => {
+  const path = event.path;
   const pathSegments = path.split('/');
   const noteId = pathSegments.splice(-2, 1)[0]; // Get ID from the path
   const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
