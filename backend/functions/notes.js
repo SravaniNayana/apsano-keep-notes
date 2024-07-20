@@ -152,37 +152,22 @@ const handlePost = async (event) => {
 const handlePut = async (event) => {
   const path = event.path;
   const noteId = event.path.split('/').pop(); // Get ID from the path
-  const { title, content, tags, color, reminder } = JSON.parse(event.body);
   if (path.includes('/archive')) {
-    const note = await Note.findByIdAndUpdate(noteId, {
-        title,
-        content,
-        tags,
-        color,
-        reminder,
-        archived: true
-    }, { new: true });
+    const note = await Note.findByIdAndUpdate(noteId, { archived: true }, { new: true });
   } else if (path.includes('/unarchive')) {
-     const note = await Note.findByIdAndUpdate(noteId, {
-          title,
-          content,
-          tags,
-          color,
-          reminder,
-          archived: false
-      }, { new: true });
+     const note = await Note.findByIdAndUpdate(noteId, { archived: false }, { new: true });
   }
   
 
-  if (!note) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify({ message: 'Note not found' }),
-      headers: {
-        'Access-Control-Allow-Origin': corsOptions.origin,
-      },
-    };
-  }
+  // if (!note) {
+  //   return {
+  //     statusCode: 404,
+  //     body: JSON.stringify({ message: 'Note not found' }),
+  //     headers: {
+  //       'Access-Control-Allow-Origin': corsOptions.origin,
+  //     },
+  //   };
+  // }
   
   return {
     statusCode: 200,
@@ -197,7 +182,7 @@ const handleDelete = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
 
   // await Note.findByIdAndDelete(noteId);
-  const note = await Note.findByIdAndUpdate( noteId, { user: user.userId },
+  const note = await Note.findByIdAndUpdate( noteId,
     { trash: true },
     { new: true }
   );
