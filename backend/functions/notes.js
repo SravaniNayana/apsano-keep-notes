@@ -184,7 +184,7 @@ const handleDelete = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
 
   // await Note.findByIdAndDelete(noteId);
-  const note = await Note.findByIdAndUpdate( noteId, user: user.userId },
+  const note = await Note.findByIdAndUpdate( noteId, { user: user.userId },
     { trash: true },
     { new: true }
   );
