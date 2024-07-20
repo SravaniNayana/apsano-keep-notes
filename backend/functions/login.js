@@ -53,8 +53,8 @@ exports.handler = async (event) => {
       };
     }
 
-    // Compare password
-    const isMatch = await user.comparePassword(password);
+    // Match password
+    const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return {
         statusCode: 401,
