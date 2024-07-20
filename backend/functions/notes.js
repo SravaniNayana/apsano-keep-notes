@@ -135,8 +135,17 @@ const handlePost = async (event) => {
 const handlePut = async (event) => {
   const noteId = event.path.split('/').pop(); // Get ID from the path
   const { archived } = JSON.parse(event.body);
+  const { title, content, tags, color, reminder, archived, trash } = JSON.parse(event.body);
+  const note = await Note.findByIdAndUpdate(noteId, {
+      title,
+      content,
+      tags,
+      color,
+      reminder,
+      archived,
+      trash
+  }, { new: true });
 
-  const note = await Note.findById(noteId);
   if (!note) {
     return {
       statusCode: 404,
@@ -146,10 +155,6 @@ const handlePut = async (event) => {
       },
     };
   }
-
-  note.archived = archived !== undefined ? archived : note.archived;
-  await note.save();
-
   return {
     statusCode: 200,
     body: JSON.stringify(note),
