@@ -84,10 +84,10 @@ exports.handler = async (event, context) => {
 
 const handleGet = async (event) => {
   const path = event.path;
-  const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
+  const user = verifyToken(event.headers.authorization.split(' ')[1]).user;
 
   if (path.includes('/archived')) {
-    const notes = await Note.find({ userId, archived: true });
+    const notes = await Note.find({ user, archived: true });
     return {
       statusCode: 200,
       body: JSON.stringify(notes),
@@ -97,7 +97,7 @@ const handleGet = async (event) => {
     };
   }
 
-  const notes = await Note.find({ userId, archived: false });
+  const notes = await Note.find({ user, archived: false });
   return {
     statusCode: 200,
     body: JSON.stringify(notes),
@@ -108,11 +108,11 @@ const handleGet = async (event) => {
 };
 
 const handlePost = async (event) => {
-  const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
+  const user = verifyToken(event.headers.authorization.split(' ')[1]).user;
   const { title, content, tags, color, reminder } = JSON.parse(event.body);
 
   const note = new Note({
-    userId,
+    user,
     title,
     content,
     tags,
