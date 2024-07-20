@@ -156,28 +156,23 @@ const handlePut = async (event) => {
   const userId = verifyToken(event.headers.authorization.split(' ')[1]).userId;
   if (path.includes('/archive')) {
     const note = await Note.findByIdAndUpdate({ _id: noteId, user: userId }, { archived: true }, { new: true });
+    return {
+      statusCode: 200,
+      body: JSON.stringify(note),
+      headers: {
+        'Access-Control-Allow-Origin': corsOptions.origin,
+      },
+    };
   } else if (path.includes('/unarchive')) {
      const note = await Note.findByIdAndUpdate({ _id: noteId, user: userId }, { archived: false }, { new: true });
-  }
-  
-
-  // if (!note) {
-  //   return {
-  //     statusCode: 404,
-  //     body: JSON.stringify({ message: 'Note not found' }),
-  //     headers: {
-  //       'Access-Control-Allow-Origin': corsOptions.origin,
-  //     },
-  //   };
-  // }
-  
-  return {
-    statusCode: 200,
-    body: JSON.stringify(note),
-    headers: {
-      'Access-Control-Allow-Origin': corsOptions.origin,
-    },
-  };
+     return {
+        statusCode: 200,
+        body: JSON.stringify(note),
+        headers: {
+          'Access-Control-Allow-Origin': corsOptions.origin,
+        },
+      };
+  }  
 };
 
 const handleDelete = async (event) => {
