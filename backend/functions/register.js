@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { username, password } = JSON.parse(event.body);
+    const { username, email, password } = JSON.parse(event.body);
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return {
@@ -49,7 +49,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const user = new User({ username, password });
+    const user = new User({ username, email, password });
     await user.save();
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
